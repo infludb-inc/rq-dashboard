@@ -1,0 +1,24 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+
+[packages]
+arrow = "*"
+click = "*"
+itsdangerous = "*"
+python-dateutil = "*"
+redis = "*"
+rq = "*"
+six = "*"
+Flask = "*"
+Jinja2 = "*"
+MarkupSafe = "*"
+Werkzeug = "*"
+Redis-Sentinel-Url = "*"
+
+[requires]
+python_version = "3.7"
