@@ -32,6 +32,7 @@ from flask import (
     url_for,
 )
 from redis_sentinel_url import connect as from_url
+from rq.exceptions import NoSuchJobError
 from rq import (
     VERSION as rq_version,
     Queue,
@@ -456,6 +457,21 @@ def requeue_all(queue_name):
     count = len(job_ids)
     for job_id in job_ids:
         requeue_job(job_id, connection=current_app.redis_conn)
+    return dict(status="OK", count=count)
+
+
+@blueprint.route('/remove_empty_failed_jobs')
+def remove_empty_failed_jobs():
+    queues = Queue.all()
+    count = len(queues)
+    for queue in queues:
+        job_ids = queue.failed_job_registry.get_job_ids()
+        for job_id in job_ids:
+            try:
+                Job.fetch(id=job_id)
+            except NoSuchJobError:
+                queue.failed_job_registry.remove(job_id)
+
     return dict(status="OK", count=count)
 
 

@@ -63,4 +63,16 @@
         });
         return false;
     });
+
+    $('#remove-empty-failed-jobs-btn').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var $this = $(this);
+
+        modalConfirm('remove empty failed jobs', function() {
+            $.get($this.attr('href'), function(data) {});
+        });
+        return false;
+    });
 })($);
