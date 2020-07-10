@@ -51,4 +51,16 @@
         $('#refresh-button').click(reload_table);
         $('[data-toggle=tooltip]').tooltip();
     });
+
+    $('#requeue-all-queues-btn').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var $this = $(this);
+
+        modalConfirm('requeue all', function() {
+            $.get($this.attr('href'), function(data) {});
+        });
+        return false;
+    });
 })($);

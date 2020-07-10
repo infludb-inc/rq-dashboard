@@ -52,7 +52,6 @@ from six import string_types
 from .legacy_config import upgrade_config
 from .version import VERSION as rq_dashboard_version
 
-
 # Quick import solution for backward compat
 scheduler_is_here = True
 try:
@@ -238,7 +237,7 @@ def serialize_job(job):
     if job.is_deferred:
         enqueued_at = "Awaiting completion: " + job._dependency_id
     elif (
-        not job.enqueued_at  # This means that the job is scheduled cause only deferred or scheduled jobs enqueued_at field is Null
+            not job.enqueued_at  # This means that the job is scheduled cause only deferred or scheduled jobs enqueued_at field is Null
     ):
         enqueued_at = ScheduledJobRegistry(job.origin).get_scheduled_time(job)
         enqueued_at = serialize_date(enqueued_at)
@@ -460,6 +459,15 @@ def requeue_all(queue_name):
     return dict(status="OK", count=count)
 
 
+@blueprint.route('/requeue_all_queues')
+def requeue_all_queues():
+    queues = Queue.all()
+    count = len(queues)
+    [requeue_all(queue.name) for queue in queues]
+
+    return dict(status="OK", count=count)
+
+
 @blueprint.route("/queue/<queue_name>/<registry_name>/empty", methods=["POST"])
 @jsonify
 def empty_queue(queue_name, registry_name):
@@ -604,7 +612,7 @@ def job_info(instance_number, job_id):
     if job.is_deferred:
         enqueued_at = job._dependency_id
     elif (
-        not job.enqueued_at  # This means that the job is scheduled cause only deferred or scheduled jobs enqueued_at field is Null
+            not job.enqueued_at  # This means that the job is scheduled cause only deferred or scheduled jobs enqueued_at field is Null
     ):
         enqueued_at = ScheduledJobRegistry(job.origin).get_scheduled_time(job)
         enqueued_at = serialize_date(enqueued_at)

@@ -7,6 +7,10 @@
     <h1>Queues</h1>
     <p class="fixed intro">This list below contains all the registered queues with the number of jobs currently
                             in the queue. Select a queue from above to view all jobs currently pending on the queue.</p>
+
+    <a href="{{ url_for('rq_dashboard.requeue_all_queues') }}" id="requeue-all-queues-btn" class="btn btn-outline-warning btn-sm"
+            style="float: right; margin-right: 8px; margin-bottom: 8px;">Requeue All Queues</a>
+
     <div class="table-responsive-md">
         <table id="queues" class="table table-bordered">
             <thead class="thead-light">
